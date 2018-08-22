@@ -17,30 +17,26 @@ class Scraper
 
   def self.scrape_profile_page(profile_url)
     html = Nokogiri::HTML(open(profile_url))
+
+    student_data = {
+      :profile_quote => html.css('div.vitals-text-container div.profile-quote').text,
+      :bio => html.css('div.description-holder p').text
+    }
+
     social_links = html.css('div.social-icon-container a').collect { |link| link.attributes['href'].value }
     social_kv_pairs = social_links.collect do |link|
       if link.include? "twitter.com"
-        { :twitter => link }
+        student_data[:twitter] = link
       elsif link.include? "linkedin.com"
-        { :linkedin => link }
+        student_data[:linkedin] = link
       elsif link.include? "github.com"
-        { :github => link }
+        student_data[:github] = link
       else
-        { :blog => link }
+        student_data[:blog] = link
       end
     end
-    binding.pry
-    {
-      # :name => html.css('div.vitals-text-container h1.profile-name').text,
-      # :location => html.css('div.vitals-text-container h2.profile-location').text,
-      :twitter => html.css('div.social-icon-container a')[0].attributes['href'].value,
-      :linkedin => html.css('div.social-icon-container a')[1].attributes['href'].value,
-      :github => html.css('div.social-icon-container a')[2].attributes['href'].value,
-      :blog => html.css('div.social-icon-container a')[3].attributes['href'].value,
-      :profile_quote => html.css('div.vitals-text-container div.profile-quote').text,
-      :bio => html.css('div.description-holder p').text
-      # :profile_url => profile_url
-    }
+
+
   end
 
 end
