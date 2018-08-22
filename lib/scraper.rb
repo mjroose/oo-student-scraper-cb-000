@@ -5,6 +5,7 @@ class Scraper
 
   def self.scrape_index_page(index_url)
     html = Nokogiri::HTML('../fixtures/student-site/index.html')
+    # cards = 
     binding.pry
   end
 
